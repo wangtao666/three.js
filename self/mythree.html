@@ -12,6 +12,7 @@
 </head>
 <body>
 <script src="../build/three.js"></script>
+<script src="../examples/js/libs/stats.min.js"></script>
 <script>
     //场景
     var scene = new THREE.Scene();
@@ -33,6 +34,13 @@
     scene.add(cube);
     //相机位置  数值越大图形越小
     camera.position.z = 6;
+    //性能监视器
+    var stats = new Stats();
+    //stats放在屏幕左上角
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
     //渲染
     function render() {
         //动画帧
@@ -43,6 +51,8 @@
 //        cube.rotation.z += 0.01;
         //渲染
         renderer.render(scene,camera);
+
+        stats.update();
     }
     render();
 </script>

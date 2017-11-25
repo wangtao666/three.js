@@ -13,8 +13,10 @@
 <body onload="threeStart()">
 <div id="canvas-frame"></div>
 <script src="../build/three.js"></script>
+<script src="../examples/js/libs/stats.min.js"></script>
 <script>
     var renderer;//渲染器
+    var stats
     width = document.getElementById('canvas-frame').clientWidth;//画布宽
     height = document.getElementById('canvas-frame').clientHeight;//画布高
     //初始化渲染器
@@ -28,6 +30,12 @@
         document.getElementById('canvas-frame').appendChild(renderer.domElement);
 
         renderer.setClearColor(0xff0000,1.0);
+
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+        document.getElementById('canvas-frame').appendChild(stats.domElement);
     }
     //初始化场景
     var scene;
@@ -108,6 +116,8 @@
         camera.lookAt(scene.position);
         renderer.render(scene,camera);
         requestAnimationFrame(animation);
+
+        stats.update();
     }
 </script>
 </body>
