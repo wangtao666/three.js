@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div#canvas-frame{
+            border:none;
+            cursor: pointer;
+            width: 100%;
+            height:600px;
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+<body onload="threeStart()">
+<div id="canvas-frame"></div>
+<script src="../build/three.js"></script>
+<script>
+    //设置渲染器
+    var renderer;
+    function initThree() {
+        width = document.getElementById('canvas-frame').clientWidth;
+        height = document.getElementById('canvas-frame').clientHeight;
+        renderer = new THREE.WebGLRenderer({
+            antialias : true
+        });
+        renderer.setSize(width,height);
+        document.getElementById('canvas-frame').appendChild(renderer.domElement);
+        //设置canvas背景色(clearColor)和背景色透明度（clearAlpha）,renderer.setClearColor(clearColor,clearAlpha)
+        renderer.setClearColor(0xFF0000,0.4);
+    }
+    //设置相机
+    var camera;
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(45,width/height,1,10000);
+        camera.position.x = 1000;
+        camera.position.y = 1000;
+        camera.position.z = 1000;
+        camera.up.x = 0;
+        camera.up.y = 0;
+        camera.up.z = 1;
+        /*
+        * position对应的是在空间中camera的位置
+        * camera.lookAt()对应的是camera的旋转角度（rotation），即旋转camera朝向那个位置
+        * */
+        camera.lookAt(0,0,0)
+    }
+    //设置场景
+    var scene;
+    function initScene() {
+        scene = new THREE.Scene();
+    }
+    //设置光源
+    /*
+    * 如果没有光源，就不可能看到任何渲染结果。
+    *   AmbientLight: 环境光，基础光源，它的颜色会被加载到整个场景和所有对象的当前颜色上。
+    *   PointLight：点光源，朝着所有方向都发射光线
+    *   SpotLight ：聚光灯光源：类型台灯，天花板上的吊灯，手电筒等
+    *   DirectionalLight：方向光，又称无限光，从这个发出的光源可以看做是平行光.
+    * */
+    var light;
+    function initLight() {
+        light = new THREE.DirectionalLight(0xff0000,1.0,0);
+        light.position.set(100,100,200);
+        scene.add(light);
+    }
+    //设置对象规则
+    var cube;
+    function initObject() {
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(-500,0,0));
+        geometry.vertices.push(new THREE.Vector3(500,0,0));
+        /*
+            var line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0xeee3f4,opacity:0.7}));
+            line.position.z = 100;
+            scene.add(line);
+            //每次都要重新申明，因为只要被调用一次就会失效
+            var line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0xeee3f4,opacity:0.7}));
+            line.position.z = 150;
+            scene.add(line);
+        */
+        for(var i = 0; i <= 20; i++){
+            var line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0xeee3f4,opacity:1}));
+            line.position.z = (i*50) - 500;
+            scene.add(line);
+
+            var line = new THREE.Line(geometry,new THREE.LineBasicMaterial({color:0xeee3f4,opacity:1}));
+            line.position.x = (i*50) - 500;
+            line.rotation.y = 90*Math.PI/180;
+            scene.add(line);
+        }
+    }
+    function threeStart() {
+        initThree();
+        initCamera();
+        initScene();
+        initLight();
+        initObject();
+        renderer.clear();
+        renderer.render(scene,camera);
+    }
+</script>
+</body>
+</html>
