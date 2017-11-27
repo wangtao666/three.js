@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,body{
+            width: 100%;
+            height:100%;
+        }
+        #my_canvas{
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body onload="threeStart()">
+<div id="my_canvas"></div>
+<script src="../build/three.js"></script>
+<script>
+    var renderer;
+    function initThree() {
+        width = document.getElementById('my_canvas').clientWidth;
+        height = document.getElementById('my_canvas').clientHeight;
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(width,height);
+        document.getElementById('my_canvas').appendChild(renderer.domElement);
+        renderer.setClearColor(0xffffff,1.0);
+    }
+    var camera;
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(45,width/height,1,10000);
+        camera.position.x = 600;
+        camera.position.y = 0;
+        camera.position.z = 600;
+        camera.up.x = 0;
+        camera.up.y = 1;
+        camera.up.z = 0;
+        camera.lookAt(0,0,0);
+    }
+    var scene;
+    function initScene() {
+        scene = new THREE.Scene();
+    }
+    var light;
+    function initLight() {
+        //第二个参数是光源强度0~1
+        light = new THREE.DirectionalLight(0xff0000,1);
+        //位置不同，方向光作用于物体的面页不同，看到的物体各个面的颜色页不一样
+        light.position.set(0,1,1);
+        scene.add(light);
+    }
+    var cube;
+    function initObject() {
+        var geometry = new THREE.CubeGeometry(200,100,50,4,4);
+        //注意MeshLambertMaterial这个方法名别写错了！！！
+        var material = new THREE.MeshLambertMaterial({color:0xffffff});
+        var mesh = new THREE.Mesh(geometry,material);
+//        mesh.position = new THREE.Vector3(0,0,0);
+        //这个是上面的缩写？
+        mesh.position.set(0,0,0);
+        scene.add(mesh);
+    }
+    function threeStart() {
+        initThree();
+        initCamera();
+        initScene();
+        initLight();
+        initObject();
+        renderer.clear();
+        renderer.render(scene,camera);
+    }
+</script>
+</body>
+</html>
