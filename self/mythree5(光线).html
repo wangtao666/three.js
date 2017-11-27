@@ -53,16 +53,22 @@
         light.position.set(0,1,1);
         scene.add(light);
     }
-    var cube;
+    var mesh;
     function initObject() {
         var geometry = new THREE.CubeGeometry(200,100,50,4,4);
         //注意MeshLambertMaterial这个方法名别写错了！！！
         var material = new THREE.MeshLambertMaterial({color:0xffffff});
-        var mesh = new THREE.Mesh(geometry,material);
+        mesh = new THREE.Mesh(geometry,material);
 //        mesh.position = new THREE.Vector3(0,0,0);
         //这个是上面的缩写？
         mesh.position.set(0,0,0);
         scene.add(mesh);
+    }
+    //定义的顺序不要乱了，不然会报错!先定义，后使用！
+    function render() {
+        requestAnimationFrame(render);
+        mesh.rotation.z += 0.01;
+        renderer.render(scene,camera);
     }
     function threeStart() {
         initThree();
@@ -70,8 +76,7 @@
         initScene();
         initLight();
         initObject();
-        renderer.clear();
-        renderer.render(scene,camera);
+        render();
     }
 </script>
 </body>
