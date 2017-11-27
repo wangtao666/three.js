@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body onload="ThreeStart()">
+<script src="../build/three.js"></script>
+<script src="../examples/js/libs/stats.min.js"></script>
+<script>
+    var camera, scene, renderer, mesh;
+    function initThree() {
+        width = 700;
+        height = 500;
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(width,height);
+        document.body.appendChild(renderer.domElement);
+    }
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(45,width/height,1,10000);
+        camera.position.z = 400;
+    }
+    function initScene() {
+        scene = new THREE.Scene();
+    }
+    function initObject() {
+        var geometry = new THREE.PlaneGeometry(500,300,1,1);
+        geometry.vertices[0].uv = new THREE.Vector2(0,0);
+        geometry.vertices[1].uv = new THREE.Vector2(2,0);
+        geometry.vertices[2].uv = new THREE.Vector2(2,2);
+        geometry.vertices[3].uv = new THREE.Vector2(0,2);
+
+        var texture = THREE.ImageUtils.loadTexture("../img/timg.jpg",null,function (t) {});
+        var material = new THREE.MeshBasicMaterial({map:texture});
+        mesh = new THREE.Mesh(geometry,material);
+        scene.add(mesh);
+        window.addEventListener('resize',onWindowResize,false);
+    }
+    function onWindowResize() {
+        camera.aspect = width/height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width,height);
+    }
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene,camera);
+    }
+    function ThreeStart() {
+        initThree();
+        initCamera();
+        initScene();
+        initObject();
+        animate();
+    }
+</script>
+</body>
+</html>
