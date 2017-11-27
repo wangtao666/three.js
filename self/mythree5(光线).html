@@ -20,8 +20,9 @@
 <body onload="threeStart()">
 <div id="my_canvas"></div>
 <script src="../build/three.js"></script>
+<script src="../examples/js/libs/stats.min.js"></script>
 <script>
-    var renderer;
+    var renderer,stats;
     function initThree() {
         width = document.getElementById('my_canvas').clientWidth;
         height = document.getElementById('my_canvas').clientHeight;
@@ -29,6 +30,14 @@
         renderer.setSize(width,height);
         document.getElementById('my_canvas').appendChild(renderer.domElement);
         renderer.setClearColor(0xffffff,1.0);
+
+        //添加性能监视器
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+
+        document.body.appendChild(stats.domElement);
     }
     var camera;
     function initCamera() {
@@ -47,7 +56,17 @@
     }
     var light;
     function initLight() {
-        //第二个参数是光源强度0~1
+        //环境光
+        light = new THREE.AmbientLight(0x00ff00,.8);
+//        light.position.set(100,100,200);
+        scene.add(light);
+
+        //点光源
+        light = new THREE.PointLight(0xff0000);
+        light.position.set(301,0,0);
+        scene.add(light);
+
+        //第二个参数是光源强度0~1  定向光
         light = new THREE.DirectionalLight(0x0000ff,1);
         //位置不同，方向光作用于物体的面页不同，看到的物体各个面的颜色页不一样
         light.position.set(.5,0,1);
@@ -88,6 +107,8 @@
         mesh3.rotation.z += 0.01;
         renderer.clear();
         renderer.render(scene,camera);
+
+        stats.update();
     }
     function threeStart() {
         initThree();
