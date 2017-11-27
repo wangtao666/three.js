@@ -48,13 +48,15 @@
     var light;
     function initLight() {
         //第二个参数是光源强度0~1
-        light = new THREE.DirectionalLight(0xff0000,1);
+        light = new THREE.DirectionalLight(0x0000ff,1);
         //位置不同，方向光作用于物体的面页不同，看到的物体各个面的颜色页不一样
-        light.position.set(0,1,1);
+        light.position.set(.5,0,1);
         scene.add(light);
     }
-    var mesh;
+    var mesh,mesh2,mesh3;
     function initObject() {
+
+        //第一个物体
         var geometry = new THREE.CubeGeometry(200,100,50,4,4);
         //注意MeshLambertMaterial这个方法名别写错了！！！
         var material = new THREE.MeshLambertMaterial({color:0xffffff});
@@ -63,11 +65,28 @@
         //这个是上面的缩写？
         mesh.position.set(0,0,0);
         scene.add(mesh);
+
+        //第二个物体
+        var geometry2 = new THREE.CubeGeometry(200,100,50,4,4);
+        var material2 = new THREE.MeshLambertMaterial({color:0xffffff});
+        mesh2 = new THREE.Mesh(geometry2,material2);
+        mesh2.position.set(-300,0,0);
+        scene.add(mesh2);
+
+        //第三个物体
+        var geometry3 = new THREE.CubeGeometry(200,100,50,4,4);
+        var material3 = new THREE.MeshLambertMaterial({color:0xffffff});
+        mesh3 = new THREE.Mesh(geometry3,material3);
+        mesh3.position.set(300,0,0);
+        scene.add(mesh3);
     }
     //定义的顺序不要乱了，不然会报错!先定义，后使用！
     function render() {
         requestAnimationFrame(render);
         mesh.rotation.z += 0.01;
+        mesh2.rotation.z += 0.01;
+        mesh3.rotation.z += 0.01;
+        renderer.clear();
         renderer.render(scene,camera);
     }
     function threeStart() {
