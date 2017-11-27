@@ -20,6 +20,8 @@
     var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
     //渲染
     var renderer = new THREE.WebGLRenderer();
+    //设置渲染器背景颜色及透明度
+    renderer.setClearColor(0xffffff,1.0);
     //设置画布大小
     renderer.setSize(window.innerWidth,window.innerHeight);
     //向body中添加画布元素
@@ -27,9 +29,19 @@
     //立体几何（长,宽,高）
     var geometry = new THREE.CubeGeometry(1,1,1);
     //材料
-    var material = new THREE.MeshBasicMaterial({color:0x00ff00});
+    /*
+    * MeshBasicMaterial：对光照无感，给几何体一种简单的颜色或显示线框
+    * MeshLambertMaterial：这种材质对光照有反应，用于创建暗淡的不发光的物体
+    * MeshPhongMaterial：这种材质对光照也有反应，用于创建金属类明亮的物体
+    * */
+    var material = new THREE.MeshLambertMaterial({color:0xff0000});
+    //光线
+    var light = new THREE.DirectionalLight(0xffffff,1);
+    light.position.set(0,1,1);
+    scene.add(light);
     //立方体
     var cube = new THREE.Mesh(geometry,material);
+    cube.position = new THREE.Vector3(0,0,0);
     //场景添加该cube
     scene.add(cube);
     //相机位置  数值越大图形越小
@@ -47,7 +59,7 @@
         requestAnimationFrame(render);
         //设置动画（回转）
         cube.rotation.x += 0.01;
-//        cube.rotation.y -= 0.01;
+        cube.rotation.y -= 0.01;
 //        cube.rotation.z += 0.01;
         //渲染
         renderer.render(scene,camera);
